@@ -38,9 +38,18 @@ namespace LeagueManager.Controllers
         {
             if (ModelState.IsValid && WebSecurity.Login(model.UserName, model.Password, persistCookie: model.RememberMe))
             {
-
-                //InitUser(model.UserName);
-                return RedirectToLocal(returnUrl);
+                ILeagueManagerRepository _repo = new LeagueManagerRepository();
+                CustomPrincipalSerializeModel CS = _repo.GetCurrentLoggedInUserDetails(model.UserName);
+                InitUser(model.UserName,"Vishal","Avhad","","");
+                //return RedirectToLocal(returnUrl);
+                if (CS.RoleName != "Admin")
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    return RedirectToAction("Dashboard", "Admin");
+                }
             }
 
             // If we got this far, something failed, redisplay form
@@ -52,7 +61,8 @@ namespace LeagueManager.Controllers
         protected void InitUser(string UserName,string FName,string LName,string Email,string RoleName)
         { 
             //FormsAuthentication auth
-            CustomPrincipal CS = new CustomPrincipal(UserName);
+           // CustomPrincipal CS = new CustomPrincipal(UserName);
+            CustomPrincipalSerializeModel CS = new CustomPrincipalSerializeModel();            
             CS.UserName = UserName;
             CS.FirstName = FName;
             CS.LastName = LName;

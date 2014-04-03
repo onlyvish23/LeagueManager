@@ -339,6 +339,31 @@ namespace LeagueManager.Models
         }
 
 
+        public CustomPrincipalSerializeModel GetCurrentLoggedInUserDetails(string UserName)
+        {
+            CustomPrincipalSerializeModel CS = new CustomPrincipalSerializeModel();
+            try {
+
+                DataClasses1DataContext DC = new DataClasses1DataContext();
+                User objU = DC.Users.SingleOrDefault(p => p.UserName == UserName);
+                if(objU!=null)
+                {
+                    CS.FirstName = objU.FirstName;
+                    CS.LastName = objU.LastName;
+                    CS.RoleName = !string.IsNullOrEmpty(objU.RoleID.ToString())? GetRoleNameByID((int)objU.RoleID):"Null";
+                    CS.Email = objU.EmailAddress;
+                    CS.UserID = objU.UserID;
+                }
+            }
+            catch(Exception ex)
+            {                
+            }
+            
+            return CS;
+
+        }
+
+
 
     }
 }

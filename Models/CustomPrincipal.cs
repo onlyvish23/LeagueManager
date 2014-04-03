@@ -40,12 +40,24 @@ namespace LeagueManager.Models
 
 
 
-    public abstract class BaseViewPage : WebViewPage
+    //public abstract class BaseViewPage : WebViewPage
+    //{
+    //    public virtual new CustomPrincipal User
+    //    {
+    //        get { return base.User as CustomPrincipal; }
+    //    }
+    //}
+
+    public class CustomPrincipalSerializeModel
     {
-        public virtual new CustomPrincipal User
-        {
-            get { return base.User as CustomPrincipal; }
-        }
+        public int UserID { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string RoleName { get; set; }
+        public string UserName { get; set; }
+        public string Email { get; set; }
+        
+        public string[] roles { get; set; }
     }
 
     
