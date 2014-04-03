@@ -1,0 +1,14 @@
+﻿@model LeagueManager.Models.ListBoxDemoCountries
+
+@{
+    ViewBag.Title = "ListBoxDemo1";
+}
+
+<h2>ListBoxDemo1</h2>
+@using(Html.BeginForm())
+{
+    @Html.ListBoxFor(m => m.Cities, Model.Cities);
+    <input type="submit" value="Show" />
+      
+}
+

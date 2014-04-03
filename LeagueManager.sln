@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeagueManager", "LeagueManager\LeagueManager.csproj", "{FA346CAA-77A2-4804-ABF5-CAB8E8419AFB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeagueManager.Tests", "LeagueManager.Tests\LeagueManager.Tests.csproj", "{A7115D47-8384-4579-A5C1-E24BD315D1C1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FA346CAA-77A2-4804-ABF5-CAB8E8419AFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA346CAA-77A2-4804-ABF5-CAB8E8419AFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA346CAA-77A2-4804-ABF5-CAB8E8419AFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA346CAA-77A2-4804-ABF5-CAB8E8419AFB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7115D47-8384-4579-A5C1-E24BD315D1C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7115D47-8384-4579-A5C1-E24BD315D1C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7115D47-8384-4579-A5C1-E24BD315D1C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7115D47-8384-4579-A5C1-E24BD315D1C1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

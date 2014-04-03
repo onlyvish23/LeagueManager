@@ -1,0 +1,113 @@
+﻿@model IEnumerable<LeagueManager.Models.User>
+@{
+    ViewBag.Title = "Dashboard";
+    WebGrid grid = new WebGrid(rowsPerPage: 5, ajaxUpdateContainerId: "MyWebGrid");
+    grid.Bind(Model, autoSortAndPage: true);
+}
+<h2>
+    Dashboard</h2>
+@section scripts
+{
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryui")
+     @Scripts.Render("~/bundles/jqueryval")
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/themes/base/css")
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $(".EditDialog").click(function () {
+
+            //alert("href: " + $(this).attr('href'));
+            var url = $(this).attr('href');
+            $("#divEditDialog").dialog({
+                title: "Edit user details",
+                autoOpen: false,
+                modal: true,
+                width: 500,
+                height: 400,
+                open: function (event, ui) {
+                    //$(this).load(url);
+                }
+            });
+
+            $("#divEditDialog").dialog('open');
+            return false;
+
+        });     //End of EditDialog click
+
+        $(".ConfirmDeleteUser").click(function (e) {
+            var url = $(this).attr('href');
+            $("#divDeleteDialog").dialog({
+                autoOpen: false,
+                width: 400,
+                modal: true,
+                buttons:
+                {
+                    "Yes": function () {
+                        $(this).dialog('close');
+                        window.location = url;
+                    },
+                    "No": function () {
+                        $(this).dialog('close');
+                    }
+                }
+            });
+
+            $("#divDeleteDialog").dialog('open');
+            e.preventDefault();
+        });
+    });                                //End of doc ready
+</script>
+<p>
+</p>
+
+
+<div style="color: Green; font-weight: bold">
+    @TempData["msg"]
+</div>
+<div id="divEditDialog" style="display: none">
+    
+</div>
+
+<div id="divDeleteDialog" style="display: none">
+    <p>
+        <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+        Are you sure to delete the current user from the system ?
+    </p>
+</div>
+<input type="button" id="btnOpen" value="Open Dialog" />
+
+<hr />
+<div id="MyWebGrid">
+    @grid.GetHtml(fillEmptyRows: false,
+alternatingRowStyle: "alternate-row",
+headerStyle: "grid-header",
+footerStyle: "grid-footer",
+mode: WebGridPagerModes.All,
+    firstText: "First",
+    lastText: "Last",
+    nextText: "Next >",
+    previousText: "< Previous",
+
+    columns: new[]
+    {
+        grid.Column("UserID",header:"ID"),
+        grid.Column("FirstName",header:"FirstName"),
+        grid.Column("LastName",header:"LastName"),
+        grid.Column("UserName",header:"UserName"),
+        grid.Column("Mobile",header:"Mobile"),
+        grid.Column("EmailAddress",header:"Email"),
+        
+        grid.Column("","Actions",
+            format: @<text>
+                    @Html.ActionLink("Edit","Edit",new {UserID=item.UserID},new {@class="EditDialog"})
+                    /
+                    @Html.ActionLink("Delete User","DeleteUser",new {id=item.UserID},new { @class = "ConfirmDeleteUser" })
+                    </text>
+            ),     
+    }
+        )
+</div>

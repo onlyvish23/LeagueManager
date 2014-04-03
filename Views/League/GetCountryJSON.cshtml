@@ -1,0 +1,29 @@
+﻿@{
+    ViewBag.Title = "GetCountryJSON";
+}
+
+<h2>Get Country By JSON</h2>
+
+<script src="../../Scripts/jquery-1.7.1-vsdoc.js" type="text/javascript"></script>
+<script src="../../Scripts/jquery-1.7.1.min.js" type="text/javascript"></script>
+<script src="../../Scripts/jquery-1.8.2.min.js" type="text/javascript"></script>
+<script  type="text/javascript">
+    function GetCountryList()
+    {
+        var URL="/League/GetCountryJSON";
+        $.getJSON(URL,funct(data){
+            var info="<UL>";
+            $.each(data,function(index,value){
+                info+='<LI>'+ value.CountryName+'</LI>';
+            });
+            info+="</UL>";
+            $("#DivCountry").html(info);
+        });
+    }
+</script>
+
+<br />
+<input type="button" value="Get Country List" onclick="GetCountryList()" />
+<br />
+
+<div id="DivCountry"></div>

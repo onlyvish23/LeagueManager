@@ -1,0 +1,24 @@
+﻿@model LeagueManager.Models.CountryListing
+
+@{
+    ViewBag.Title = "Get RadioButtonListSelection";
+    Layout = "~/Views/Shared/NewLayout.cshtml";
+}
+
+<h2>Radio button list selection demo</h2>
+
+@using (Html.BeginForm())
+{ 
+    <b>Select Country:</b><br />
+    
+    foreach (var c in Model.CountryList)
+    {
+        @Html.RadioButtonFor(p=>p.SelectedCountryID,c.CountryID,
+                                          ViewData["CheckCountryID"] != null && ViewData["CheckCountryID"].ToString()==c.CountryID.ToString() ? new { @checked = "checked" } : null  // This is for setting the default checked value if ID==2
+        ) @c.CountryName 
+        <br />
+    }
+    
+    <br />
+    <input type="submit" value="Get Selection" />
+}

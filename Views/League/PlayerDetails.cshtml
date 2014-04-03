@@ -1,0 +1,71 @@
+﻿@model LeagueManager.Models.PlayersC
+
+@{
+    ViewBag.Title = "PlayerDetails";
+}
+
+<h2>PlayerDetails</h2>
+
+<fieldset>
+    <legend>PlayersC</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.FirstName)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.FirstName)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.LastName)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.LastName)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Age)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Age)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Position)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Position)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.JerseyNo)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.JerseyNo)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.TeamID)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.TeamID)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.CountryID)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CountryID)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.CreatedDate)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CreatedDate)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.PlayerID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

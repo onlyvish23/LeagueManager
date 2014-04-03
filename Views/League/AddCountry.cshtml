@@ -1,0 +1,40 @@
+﻿@model LeagueManager.Models.CountryC
+
+@{
+    ViewBag.Title = "AddCountry";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>AddCountry</h2>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+
+    
+        <script src="../../Scripts/jquery-1.8.2.min.js" type="text/javascript"></script>
+        <script src="../../Scripts/jquery.validate.js" type="text/javascript"></script>
+        <script src="../../Scripts/jquery.validate.unobtrusive.js" type="text/javascript"></script>
+    <fieldset>
+        <legend>CountryC</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.CountryName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.CountryName)
+            @Html.ValidationMessageFor(model => model.CountryName)
+        </div>
+
+        <p>
+            <input type="submit" value="Create" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@*@section Scripts {
+    @Scripts.Render("~/bundles/jquery")
+}*@

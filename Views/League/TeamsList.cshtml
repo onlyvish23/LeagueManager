@@ -1,0 +1,120 @@
+﻿@model IEnumerable<LeagueManager.Models.TeamsC>
+
+@{
+    ViewBag.Title = "TeamsList";
+}
+
+
+
+<h2>TeamsList</h2>
+<script src="../../Scripts/jquery-1.7.1.js" type="text/javascript"></script>
+<script src="../../Scripts/jquery-ui-1.8.20.js" type="text/javascript"></script>
+<script  type="text/javascript">
+    $(document).ready(function () {
+        //alert("Hello abc");
+        $(".DeleteTeam").click(function (e) {
+            // e.preventDefault();
+            //var id = $(this).attr("href")
+            //alert(id);
+            return confirm('You are about to delete a team from the list.Are you sure ?');
+
+        });
+
+
+        //This method is to show the details of the team in a dialog box of jquery
+        $(".ShowDialog").click(function (e) {
+            var url = "League/ShowTeamDetails";
+            var ID = $(this).attr('href');
+
+            url = '@Url.Action("ShowTeamDetails","League",new {teamID=2})';
+            url = '@Url.Action("ShowTeamDetails","League")';
+            url = $(this).attr('href');
+            $("#MyDialog").dialog({
+                title: "View My team details",
+                autoOpen: false,
+                width: 500,
+                height: 400,
+                modal: true,
+                resizable: true,
+                draggable: true,
+                open: function (event, ui) {
+                    $(this).load(url);
+                },
+                buttons:
+                {
+                    "OK": function () {
+                        $(this).dialog('close');
+                    }
+                }
+
+            });
+
+            $("#MyDialog").dialog('open');
+            
+            return false;
+        });
+    });
+    
+</script>
+<p>
+    @Html.ActionLink("Create New Team", "AddTeam")
+</p>
+<table>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.TeamID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TeamName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CountryID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Established)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CountryName)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.TeamID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TeamName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CountryID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Established)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CountryName)
+        </td>
+        <td>
+            @Html.ActionLink("Edit Team", "EditTeam", new {  id=item.TeamID  }) |
+                    |
+            @Html.ActionLink("Delete Team", "DeleteTeam", new { id = item.TeamID },  new {@class="DeleteTeam" })
+
+
+             @Html.ActionLink("Details", "ShosTeamDetails", new { id = item.TeamID },  new {@class="ShowDialog" })     
+        </td>
+    </tr>
+}
+
+
+@Styles.Render("~/Content/themes/base/css");
+
+
+</table>
+<br />
+<a class="ShowDialog" href="League/ShowTeamDetails">Open Popup</a>
+<br />
+<div id="MyDialog" style="display:none">
+<h1>View the team details</h1>
+</div>

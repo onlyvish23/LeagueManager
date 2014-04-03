@@ -1,0 +1,135 @@
+﻿@model LeagueManager.Models.PlayersC
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    @* @Scripts.Render("~/bundles/jqueryui")*@
+    @Styles.Render("~/Content/themes/base/css")
+
+    <script src="../../Scripts/jquery-1.7.1.js" type="text/javascript"></script>
+<script src="../../Scripts/jquery-ui-1.8.20.min.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".DatePick").datepicker({
+                changeMonth: true,
+                changeYear: true
+            });
+
+
+            $("#abc").click(function () {
+                alert($(this).attr("id"));
+            });
+        });
+    </script>
+}
+
+@using (Html.BeginForm())
+{
+    
+    
+    @Html.ValidationSummary(true)
+
+    <a id="abc">Hello User</a>
+    <input type="text" class="DatePick"  />
+    <fieldset>
+        <legend>PlayersC</legend>
+
+       @* <div class="editor-label">
+            @Html.LabelFor(model => model.PlayerID)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.PlayerID)
+            @Html.ValidationMessageFor(model => model.PlayerID)
+        </div>*@
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.FirstName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.FirstName)
+            @Html.ValidationMessageFor(model => model.FirstName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.LastName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.LastName)
+            @Html.ValidationMessageFor(model => model.LastName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Age)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Age)
+            @Html.ValidationMessageFor(model => model.Age)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Position)
+        </div>
+        <div class="editor-field">
+           @* @Html.EditorFor(model => model.Position)*@
+             @Html.DropDownListFor(model => model.Position, (SelectList)ViewBag.Positions,"Select Position")
+            @Html.ValidationMessageFor(model => model.Position)          
+        
+
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.JerseyNo)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.JerseyNo)
+            @Html.ValidationMessageFor(model => model.JerseyNo)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.TeamID)
+           
+        </div>
+        <div class="editor-field">
+            @*@Html.EditorFor(model => model.TeamID)
+            @Html.ValidationMessageFor(model => model.TeamID)*@
+
+            @Html.DropDownListFor(Model => Model.TeamID, (SelectList)ViewBag.TeamList, "Select Team")
+           @Html.ValidationMessageFor(Model => Model.TeamID);
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.CountryID)
+        </div>
+        <div class="editor-field">
+            @*@Html.EditorFor(model => model.CountryID)*@
+
+            @Html.DropDownListFor(Model=>Model.CountryID,(SelectList)ViewBag.CountryList,"Select Country")
+            @Html.ValidationMessageFor(model => model.CountryID)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.CreatedDate)
+        </div>
+        <div class="editor-field">
+            @*@Html.EditorFor(model => model.CreatedDate, new { @class = "DatePick" })*@
+            @Html.TextBoxFor(model => model.CreatedDate,htmlAttributes :new { @class = "DatePick" })
+            @Html.ValidationMessageFor(model => model.CreatedDate)
+        </div>
+
+        <p>
+            <input type="submit" value="Create" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+

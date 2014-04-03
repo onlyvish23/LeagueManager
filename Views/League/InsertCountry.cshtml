@@ -1,0 +1,64 @@
+﻿@model LeagueManager.Models.TeamsC
+
+@{
+    ViewBag.Title = "InsertCountry";
+}
+@section Scripts
+{
+@Scripts.Render("~/bundles/jquery");
+}
+
+
+<script type="text/javascript" src="../../Scripts/jquery-1.7.1.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        //alert("Hello ");
+
+        if(@ViewData["Data"]!=null)
+        {
+            alert("Data inserted successfully.")
+        }
+
+        $('input[type=button]').click(function (e) {
+            //alert($(this).val());    
+
+            var txtVal = $("#CName").val();
+            if (txtVal == "") {
+                $("#CName").focus();
+                alert("Please enter country name.");
+                e.preventDefault();
+            }
+        });
+
+        $("B1").click(function (e) {
+            //alert($(this).val());    
+
+            var txtVal = $("#CName").val();
+            if (txtVal == "") {
+                $("#CName").focus();
+                alert("Please enter country name.");
+                e.preventDefault();
+            }
+        });
+
+    });
+</script>
+<h2>InsertCountry</h2>
+<hr />
+<h3>Add Country By Form Collection</h3>
+@using (Html.BeginForm("InsertCountry", "League"))
+{
+   @* <input type="text" name="CName" class="CN" title="Enter country name" />
+    <br />
+    <input type="button" value="Insert Country"  />*@
+    
+   
+    
+    @Html.TextBox("CName");
+    @Html.ValidationMessageFor(model=>model.CountryName)                      
+    <br />
+    <button id="B1" >Create</button>
+    <input type="button" value="Insert Country"  />
+}
+

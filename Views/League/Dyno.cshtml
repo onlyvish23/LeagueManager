@@ -1,0 +1,194 @@
+﻿@{
+    ViewBag.Title = "Dyno";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="../../LeagueManager/Scripts/jquery-1.8.2.min.js" type="text/javascript"></script>
+<script src="../../LeagueManager/Scripts/jquery.unobtrusive-ajax.js" type="text/javascript"></script>
+<script src="../../LeagueManager/Scripts/jquery.validate.unobtrusive.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(document).ready(function (e) {
+
+        $("#btnAdd").click(function () {
+            var ctr = $("#MyTable tr").length;
+            var input1 = "<input type='text' id='mytxt" + ctr + "' maxlength='20' class='.txt'></input>";
+            var btnDelete1 = "";
+            if (ctr > 1) {
+                btnDelete1 = "<input type='button' class='delete' id='btnDelete" + ctr + "' value='Delete Row' ></input>";
+            }
+            var select1 = "<select class='.MySelect' id='MySelect" + ctr + "'></select>";
+            var data1 = "<tr><td>" + ctr + "</td><td>" + select1 + "</td><td>" + input1 + "</td><td>" + btnDelete1 + "</td></tr>";
+            $("#MyTable").fadeIn(600, function () {
+                $("#MyTable tr:last").after(data1);
+            });
+            LoadSelectControl('MySelect' + ctr)
+
+        });     //End of btnAdd
+
+
+        $("#MyTable").delegate('.delete', 'click', function (e) {
+            var tr = $(this).closest("tr");
+            tr.css("background-color", "#FF3700");
+            tr.fadeOut(400, function () {
+                tr.remove();
+            });
+            //return false;
+            e.preventDefault();
+        });     //End of Delete action
+
+
+        GetSelectValues();
+
+        $("#btnValidate").click(function (e) {
+            ValidateData();
+
+        });
+
+
+    });                 //End of document ready
+
+    function GetSelectValues() {
+        var val = "";
+        var cList = {};
+        $.getJSON("/League/GetCountryList_Json", function (data) {
+            var cName = "";
+            var cID = "";
+            $.each(data, function (key, value) {
+                cName += value.CountryName + " ";
+                cID += value.CountryID + " ";
+            });
+
+
+//            cList = cList;
+//            alert(cList);
+        });
+            //val = $("#hdnValueList").val();
+            //val = $.parseJSON(val);
+		//alert("Country Values: " + val);
+        return val;
+    }
+
+    function LoadSelectControl(selectCtrl) {
+        //var values = GetSelectValues();
+        var countryList = $("#hdnValueList").val();
+        if (countryList != null) {
+            var tableCtr = $("#MyTable tr").length;
+            if (tableCtr > 2) {
+
+                //$('#options').find('option').clone().appendTo('#options2');
+
+                var prevSelect  = '#' + 'MySelect' + (tableCtr - 1);
+                var currselect = "#" + selectCtrl;
+
+                var res = $('#' + selectCtrl).closest().prev().find("option").html();
+                var res2 = $('Select .MySelect').html();               
+                //alert(res2);
+                $('#' + selectCtrl).append(res2);
+				
+				
+				var $options = $(".MySelect:first > option").clone();
+				$('#' + selectCtrl).append($options);
+				alert($options);
+            }
+            else {
+                $('<option>').val('0').text('-Select Country-').appendTo('#' + selectCtrl);
+                $.getJSON("/League/GetCountryList_Json", function (data) {
+                    $.each(data, function (key, value) {
+                        $('<option>').val(value.CountryID).text(value.CountryName).appendTo('#' + selectCtrl);
+                    });
+                });
+            }
+        }
+    }           //End of LoadSelectControl
+
+    function ValidateData() {
+        var IsVal = true;
+        var fields = $("#MyTable").find(":text");
+        $.each(fields, function (key, value) {
+            var name = $(this).eq(0).val();
+            if (name == null || name == "") {
+                alert("Please enter name at row " + (key+1));
+                $(this).eq(0).focus();
+                IsVal = false;
+                return false;
+            }
+            if (IsVal == true) {
+                alert("Data is valid");
+            }
+        });
+        //alert("Is Valid : "+IsVal);
+    }
+</script>
+<hr />
+<h2>Dynamic add delete table rows by jQuery</h2>
+<hr />
+
+<input type="button" id="btnAdd" value="Add" />
+<input type="hidden" id="hdnValueList" value="Add" />
+<input type='button' class='delete' id='btnValidate' value='Validate Data' />
+<br />
+
+<table id="MyTable" border="1">
+    <tr>
+        <td>
+            <b>ID</b>
+        </td>
+        <td>
+            <b>Select Option</b>
+        </td>
+        <td>
+            <b>Name</b>
+        </td>
+        <td>
+            Action
+        </td>
+    </tr>
+</table>
+
+<hr/>
+<h2>Below is the code to add dynamic checkboxes control </h2>
+<hr />
+<style type="text/css">
+fieldset label{
+    display: block;
+    margin-bottom: 5px;
+    font-size: 16px;
+    float: left;
+    width: 30%;
+    margin-left:18px;
+}
+
+</style>
+<fieldset>
+   <div id="cblist" style="width:400px">
+    <input type="checkbox" value="first checkbox" id="cb1" /> <label for="cb1">first checkbox</label>
+   </div>
+ </fieldset>
+<input type="text" id="txtName" />
+<input type="button" value="ok" id="btnSave" />
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#btnSave').click(function () {
+            var ctrlVal = $('#txtName').val();
+            if (ctrlVal == "") {
+                alert("Enter name of the checkbox");
+                $('#txtName').focus();
+            }
+            else {
+                addCheckbox(ctrlVal);
+            }
+        });
+    });
+
+    function addCheckbox(name) {
+        var container = $('#cblist');
+        var inputs = container.find('input');
+        var id = inputs.length + 1;
+
+        
+        $('<input />', { type: 'checkbox', id: 'cb' + id, value: name }).appendTo(container);
+        $('<label />', { 'for': 'cb' + id, text: name }).appendTo(container);
+        $('#txtName').val('');
+    }
+</script>

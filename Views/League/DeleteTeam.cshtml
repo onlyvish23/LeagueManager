@@ -1,0 +1,53 @@
+﻿@model LeagueManager.Models.TeamsC
+
+@{
+    ViewBag.Title = "DeleteTeam";
+}
+
+<h2>DeleteTeam</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<fieldset>
+    <legend>TeamsC</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.TeamID)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.TeamID)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.TeamName)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.TeamName)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.CountryID)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CountryID)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Established)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Established)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.CountryName)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CountryName)
+    </div>
+</fieldset>
+@using (Html.BeginForm()) {
+    <p>
+        <input type="submit" value="Delete" /> |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+}
