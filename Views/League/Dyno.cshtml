@@ -3,27 +3,30 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<script src="../../LeagueManager/Scripts/jquery-1.8.2.min.js" type="text/javascript"></script>
-<script src="../../LeagueManager/Scripts/jquery.unobtrusive-ajax.js" type="text/javascript"></script>
-<script src="../../LeagueManager/Scripts/jquery.validate.unobtrusive.js" type="text/javascript"></script>
+<script src="../../Scripts/jquery-1.7.1.min.js" type="text/javascript"></script>
 <script type="text/javascript">
     $(document).ready(function (e) {
 
         $("#btnAdd").click(function () {
             var ctr = $("#MyTable tr").length;
-            var input1 = "<input type='text' id='mytxt" + ctr + "' maxlength='20' class='.txt'></input>";
+            var input1 = "<input type='text' id='mytxt" + ctr + "' maxlength='20' class='.txt' name='playername'></input>";
             var btnDelete1 = "";
             if (ctr > 1) {
-                btnDelete1 = "<input type='button' class='delete' id='btnDelete" + ctr + "' value='Delete Row' ></input>";
+                btnDelete1 = "<input type='button' class='delete' id='btnDelete" + ctr + "' value='Delete Row'  ></input>";
             }
             var select1 = "<select class='.MySelect' id='MySelect" + ctr + "'></select>";
             var data1 = "<tr><td>" + ctr + "</td><td>" + select1 + "</td><td>" + input1 + "</td><td>" + btnDelete1 + "</td></tr>";
+
+
+
             $("#MyTable").fadeIn(600, function () {
                 $("#MyTable tr:last").after(data1);
             });
             LoadSelectControl('MySelect' + ctr)
 
         });     //End of btnAdd
+
+        LoadSelectValuesFromPage();
 
 
         $("#MyTable").delegate('.delete', 'click', function (e) {
@@ -37,11 +40,9 @@
         });     //End of Delete action
 
 
-        GetSelectValues();
 
         $("#btnValidate").click(function (e) {
             ValidateData();
-
         });
 
 
@@ -49,73 +50,61 @@
 
     function GetSelectValues() {
         var val = "";
-        var cList = {};
         $.getJSON("/League/GetCountryList_Json", function (data) {
-            var cName = "";
-            var cID = "";
-            $.each(data, function (key, value) {
-                cName += value.CountryName + " ";
-                cID += value.CountryID + " ";
-            });
-
-
-//            cList = cList;
-//            alert(cList);
         });
-            //val = $("#hdnValueList").val();
-            //val = $.parseJSON(val);
-		//alert("Country Values: " + val);
+       
         return val;
     }
+    function LoadSelectValuesFromPage() {
+        var val = "";
+        $('<option>').val(0).text("-Select-").appendTo('#S1');
+        $.getJSON("/League/GetCountryList_Json", function (data) {
+            $.each(data, function (key, value) {
+                $('<option>').val(value.CountryID).text(value.CountryName).appendTo('#S1');                
+            });
+        });
+    }
 
-    function LoadSelectControl(selectCtrl) {
-        //var values = GetSelectValues();
-        var countryList = $("#hdnValueList").val();
-        if (countryList != null) {
-            var tableCtr = $("#MyTable tr").length;
-            if (tableCtr > 2) {
-
-                //$('#options').find('option').clone().appendTo('#options2');
-
-                var prevSelect  = '#' + 'MySelect' + (tableCtr - 1);
-                var currselect = "#" + selectCtrl;
-
-                var res = $('#' + selectCtrl).closest().prev().find("option").html();
-                var res2 = $('Select .MySelect').html();               
-                //alert(res2);
-                $('#' + selectCtrl).append(res2);
-				
-				
-				var $options = $(".MySelect:first > option").clone();
-				$('#' + selectCtrl).append($options);
-				alert($options);
-            }
-            else {
-                $('<option>').val('0').text('-Select Country-').appendTo('#' + selectCtrl);
-                $.getJSON("/League/GetCountryList_Json", function (data) {
-                    $.each(data, function (key, value) {
-                        $('<option>').val(value.CountryID).text(value.CountryName).appendTo('#' + selectCtrl);
-                    });
-                });
-            }
+    function LoadSelectControl(selectCtrl) {        
+        var values = GetSelectValues();
+        if (values != null) {
+            $.each(values, function (key, value) {
+                $('<option>').val(key).text(value).appendTo('#' + selectCtrl);
+            });
         }
-    }           //End of LoadSelectControl
+        var options = $("#S1 > option").clone();
+        $("#" + selectCtrl).append(options);
+    }
+
+
 
     function ValidateData() {
         var IsVal = true;
+        var selectControls = $("#MyTable").find("Select");
+        $.each(selectControls, function (key, value) {
+            var value1 = $(this).eq(0).val();
+            if (value1 == "0") {
+                alert("Please select country at row " + (key + 1));
+                $(this).eq(0).focus();
+                IsVal = false;
+                return false;
+            }
+        });
+
         var fields = $("#MyTable").find(":text");
         $.each(fields, function (key, value) {
+
             var name = $(this).eq(0).val();
             if (name == null || name == "") {
                 alert("Please enter name at row " + (key+1));
                 $(this).eq(0).focus();
                 IsVal = false;
                 return false;
-            }
-            if (IsVal == true) {
+            }            
+        });
+        if (IsVal == true) {
                 alert("Data is valid");
             }
-        });
         //alert("Is Valid : "+IsVal);
     }
 </script>
@@ -124,9 +113,15 @@
 <hr />
 
 <input type="button" id="btnAdd" value="Add" />
-<input type="hidden" id="hdnValueList" value="Add" />
 <input type='button' class='delete' id='btnValidate' value='Validate Data' />
+
+
 <br />
+
+<div style="display:none">
+<select class="MySelect" id="S1">    
+</select>
+</div>
 
 <table id="MyTable" border="1">
     <tr>
