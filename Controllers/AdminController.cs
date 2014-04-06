@@ -10,9 +10,9 @@ using LeagueManager.Models;
 
 namespace LeagueManager.Controllers
 {
-    [Authorize(Roles="Admin")]
-
-    public class AdminController : Controller
+    //[Authorize(Roles="Admin")]
+    [CustomAuthorize(Roles="Admin")]
+    public class AdminController : BaseController
     {
         //
         // GET: /Admin/
@@ -30,6 +30,11 @@ namespace LeagueManager.Controllers
 
         public ActionResult Dashboard()
         {
+            ViewBag.Message = "Modify this template to jump-start your ASP.NET MVC application.";
+
+            string str = User.FirstName != null ? User.FirstName : "";
+            string strE = User.UserEmail != null ? User.UserEmail : "";
+            string strR = User.MyRoles != null ? User.MyRoles[0] : "";
             var res = repo.GetUsersList();
             return View(res);
         }

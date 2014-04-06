@@ -38,11 +38,13 @@ namespace LeagueManager.Controllers
         {
             if (ModelState.IsValid && WebSecurity.Login(model.UserName, model.Password, persistCookie: model.RememberMe))
             {
-                ILeagueManagerRepository _repo = new LeagueManagerRepository();
-                CustomPrincipalSerializeModel CS = _repo.GetCurrentLoggedInUserDetails(model.UserName);
-                InitUser(model.UserName,"Vishal","Avhad","","");
+                //string[] RoleName= Roles.GetRolesForUser(model.UserName);
+                ILeagueManagerRepository repo = new LeagueManagerRepository();
+                CustomPrincipalS CPs= repo.GetCurrentLoggedInUserDetails(model.UserName);
+                InitializeThisUser(model.UserName,CPs.FirstName,CPs.LastName,CPs.RoleName, CPs.UserID,CPs.UserEmail);
                 //return RedirectToLocal(returnUrl);
-                if (CS.RoleName != "Admin")
+
+                if (CPs.RoleName != "Admin")
                 {
                     return RedirectToAction("Index", "Home");
                 }
@@ -56,29 +58,6 @@ namespace LeagueManager.Controllers
             ModelState.AddModelError("", "The user name or password provided is incorrect.");
             return View(model);
         }
-
-
-        protected void InitUser(string UserName,string FName,string LName,string Email,string RoleName)
-        { 
-            //FormsAuthentication auth
-           // CustomPrincipal CS = new CustomPrincipal(UserName);
-            CustomPrincipalSerializeModel CS = new CustomPrincipalSerializeModel();            
-            CS.UserName = UserName;
-            CS.FirstName = FName;
-            CS.LastName = LName;
-            CS.RoleName = RoleName;
-            CS.Email = Email;
-
-            string UserData = JsonConvert.SerializeObject(CS);
-            FormsAuthenticationTicket authTicket = new FormsAuthenticationTicket(1, Email, DateTime.Now,
-                DateTime.Now.AddMinutes(20), false, UserData);
-            string encTicket = FormsAuthentication.Encrypt(authTicket);
-
-            HttpCookie faCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encTicket);
-
-            Response.Cookies.Add(faCookie);
-        }
-
 
         //
         // POST: /Account/LogOff
@@ -118,6 +97,7 @@ namespace LeagueManager.Controllers
                 // Attempt to register the user
                 try
                 {
+                    ILeagueManagerRepository _repo = new LeagueManagerRepository();
                    string strRes= WebSecurity.CreateUserAndAccount(model.UserName, model.Password, 
                         new  {FirstName=model.FirstName,
                               LastName= model.LastName,
@@ -125,10 +105,12 @@ namespace LeagueManager.Controllers
                               IsCoaching=model.IsCoachingNow,RoleID= model.RoleID
                                 }
                     ,false);
-                    ILeagueManagerRepository _repo= new LeagueManagerRepository();
+                    
                     string strRoleName = !string.IsNullOrEmpty(model.RoleID.ToString()) ? _repo.GetRoleNameByID(Convert.ToInt32(model.RoleID)) : "";
 
                    Roles.AddUserToRole(model.UserName, strRoleName);
+
+                   InitializeThisUser(model.UserName, model.FirstName, model.LastName, strRoleName, "0", model.EmailAddress);
 
                     WebSecurity.Login(model.UserName, model.Password);
                     if (strRoleName != "Admin")
@@ -151,6 +133,36 @@ namespace LeagueManager.Controllers
 
         //
         // POST: /Account/Disassociate
+
+
+        protected void InitializeThisUser(string UserName,string FName,string LName,string Role,string UserID,string Email)
+        {
+            try
+            {
+                ILeagueManagerRepository _repo = new LeagueManagerRepository();
+                CustomPrincipalS CP = new CustomPrincipalS();
+                CP.LastLoginDateTime = DateTime.Now;
+                CP.FirstName = FName;
+                CP.LastName = LName;
+                CP.UserRoles = new string[] { Role };
+                CP.UserEmail = Email;
+                CP.RoleName = Role;
+
+                CP.UserID = UserID;
+
+                string UserData = JsonConvert.SerializeObject(CP);
+                FormsAuthenticationTicket authTicket = new FormsAuthenticationTicket(1, Email, DateTime.Now, DateTime.Now.AddMinutes(20),
+                    false, UserData);
+                string encTicket = FormsAuthentication.Encrypt(authTicket);
+
+                HttpCookie faCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encTicket);
+                Response.Cookies.Add(faCookie);
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]

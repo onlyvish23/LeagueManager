@@ -40,8 +40,7 @@ namespace LeagueManager.Models
         UserProfile GetUserDetailsByID(int ID);
         string EditUser(UserProfile UP);
 
-        CustomPrincipalSerializeModel GetCurrentLoggedInUserDetails(string UserName);
-        
 
+        CustomPrincipalS GetCurrentLoggedInUserDetails(string UserName);
     }
 }

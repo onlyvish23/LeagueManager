@@ -5,9 +5,7 @@ using System.Threading;
 using System.Web.Mvc;
 using WebMatrix.WebData;
 using LeagueManager.Models;
-using System.Web;
-using System.Web.Routing;
-
+using System.Web.Security;
 namespace LeagueManager.Filters
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
@@ -21,6 +19,18 @@ namespace LeagueManager.Filters
         {
             // Ensure ASP.NET Simple Membership is initialized only once per app start
             LazyInitializer.EnsureInitialized(ref _initializer, ref _isInitialized, ref _initializerLock);
+        }
+
+        protected static void CreateLeagueSystemRoles()
+        {
+            if (!Roles.RoleExists("Admin"))
+                Roles.CreateRole("Admin");
+
+            if (!Roles.RoleExists("Manager"))
+                Roles.CreateRole("Manager");
+
+            if (!Roles.RoleExists("Player"))
+                Roles.CreateRole("Player");
         }
 
         private class SimpleMembershipInitializer
@@ -40,36 +50,19 @@ namespace LeagueManager.Filters
                         }
                     }
 
-                    WebSecurity.InitializeDatabaseConnection("LeagueConnectionString", "UserProfile", "UserId", "UserName", autoCreateTables: true);
+                    //WebSecurity.InitializeDatabaseConnection("DefaultConnection", "UserProfile", "UserId", "UserName", autoCreateTables: true);
+
+                    if (!WebSecurity.Initialized)
+                    {
+                        WebSecurity.InitializeDatabaseConnection("LeagueConnectionString", "Users", "UserID", "UserName", autoCreateTables: true);
+                    }
+
+                    //CreateLeagueSystemRoles();
+                    
                 }
                 catch (Exception ex)
                 {
                     throw new InvalidOperationException("The ASP.NET Simple Membership database could not be initialized. For more information, please see http://go.microsoft.com/fwlink/?LinkId=256588", ex);
-                }
-            }
-        }
-    }
-
-
-
-
-    public class CustomAuthorizeAttribute : AuthorizeAttribute
-    {
-        protected virtual CustomPrincipal CurrentUser
-        {
-            get { return HttpContext.Current.User as CustomPrincipal; }
-        }
-
-        public override void OnAuthorization(AuthorizationContext filterContext)
-        {
-            if (filterContext.HttpContext.Request.IsAuthenticated)
-            {
-
-                if (!Users.Contains(CurrentUser.UserId.ToString()))
-                {
-                    filterContext.Result = new RedirectToRouteResult(new
-                    RouteValueDictionary(new { controller = "Error", action = "AccessDenied" }));
-                    // base.OnAuthorization(filterContext); //returns to login url
                 }
             }
         }

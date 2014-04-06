@@ -261,6 +261,20 @@ namespace LeagueManager.Models
              return list;
         }
 
+        public bool IsUserInRole(string UName,string RoleName)
+        {
+            DataClasses1DataContext DC = new DataClasses1DataContext();
+            DC.ObjectTrackingEnabled = false;
+            //var res= from U in DC.Users
+            //         join R in DC.webpages_Roles on 
+            //         join UR in DC.webpages_UsersInRoles
+            //         where R.RoleName==RoleName && U.UserName==UName
+            //         select U.UserID
+
+            return true;
+
+        }
+
         public string GetRoleNameByID(int roleID)
         { 
             string str="";
@@ -339,29 +353,32 @@ namespace LeagueManager.Models
         }
 
 
-        public CustomPrincipalSerializeModel GetCurrentLoggedInUserDetails(string UserName)
+        public CustomPrincipalS GetCurrentLoggedInUserDetails(string UserName)
         {
-            CustomPrincipalSerializeModel CS = new CustomPrincipalSerializeModel();
-            try {
-
-                DataClasses1DataContext DC = new DataClasses1DataContext();
-                User objU = DC.Users.SingleOrDefault(p => p.UserName == UserName);
-                if(objU!=null)
+            CustomPrincipalS CS = new CustomPrincipalS();
+            try
+            {
+                using (DataClasses1DataContext DC = new DataClasses1DataContext())
                 {
-                    CS.FirstName = objU.FirstName;
-                    CS.LastName = objU.LastName;
-                    CS.RoleName = !string.IsNullOrEmpty(objU.RoleID.ToString())? GetRoleNameByID((int)objU.RoleID):"Null";
-                    CS.Email = objU.EmailAddress;
-                    CS.UserID = objU.UserID;
+                    User objU = DC.Users.SingleOrDefault(p => p.UserName == UserName);
+                    if (objU != null)
+                    {
+                        CS.FirstName = objU.FirstName;
+                        CS.LastName = objU.LastName;
+                        CS.RoleName = !string.IsNullOrEmpty(objU.RoleID.ToString()) ? GetRoleNameByID((int)objU.RoleID) : "Null";
+                        CS.UserEmail = objU.EmailAddress;
+                        CS.UserID = objU.UserID.ToString();
+                    }
                 }
             }
-            catch(Exception ex)
-            {                
+            catch (Exception ex)
+            {
             }
-            
+
             return CS;
 
         }
+
 
 
 

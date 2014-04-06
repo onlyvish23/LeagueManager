@@ -6,21 +6,10 @@ using System.Web.Mvc;
 
 namespace LeagueManager.Controllers
 {
-    public class ErrorController : Controller
+    public class ErrorController : BaseController
     {
         //
         // GET: /Error/
-
-        public ActionResult Index()
-        {
-            return View();
-        }
-
-        public ActionResult ViewNotFound()
-        {
-            return View();
-        }
-
 
         public ActionResult AccessDenied()
         {
